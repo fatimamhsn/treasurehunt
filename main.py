@@ -59,7 +59,7 @@ class Market(Place):
                                Press 'enter' to do so""")
                 if not reply:
                     player.rucksack.remove('magical berries')
-                    player.gold += 20
+                    player.gold += 10
 
                 opt = input("""You can now buy something, but only one item will be of use.Choose Wisely!
                              Either: 1) New Shoes - 10 gold coins  2) Lantern - 10 gold coins  3)  Bucket - 15 gold coins.
@@ -104,7 +104,7 @@ class Market(Place):
                     player.pick_up('new shoes')
                     print("You have bought new shoes!. They have been added to your rucksack")
                     player.gold -= 10
-                    print(f"You have {playr.gold} gold coins remaining")
+                    print(f"You have {player.gold} gold coins remaining")
                 else:
                     print(f"You only have {player.gold} gold coins!")
             elif choice == '2':
@@ -171,8 +171,8 @@ class Village(Place):
             else:
                 choice = input("You have bought the Magical wish. You can either have 1)100 coins  2)A Lucky Prize")  
                 if choice == '1':
-                    print(f"Congratulations! You hve been granted 00 gold coins.
-                    You now have {player.gold} gold coins")
+                    print(f"""Congratulations! You hve been granted 100 gold coins.
+                    You now have {player.gold} gold coins""")
                 elif choice == '2':
                     print("""You have been granted Lucky Prize
                     
@@ -187,31 +187,77 @@ class Castle(Place):
             Press 'enter' to pick them up""")
         if not opt:
             player.pick_up('crown')
-        print("Oh no! You've set off an alarm. A huge army is apporoaching to capure you")
+        print("Oh no! You've set off an alarm. A huge army is approaching to capture you")
         if 'mystery item' in player.rucksack:
-            opt1 = input(""" Wait! Luckily you chose the Mystery Item. Press 'enter' to use it if you want to save yourelf!""")
-            if not opt1:
+            opt1 = input(""" Wait! Luckily you chose the Mystery Item. Enter 'help' to save yourself""")
+            if opt1 == 'help':
                 direction = 'east'
                 player.move(direction)
+            else:
+                print("""Oh no! The army has reached you...
+                           G A M E   O V E R !""")
         else:
+            player.remove_item('crown')
             opt2 = input("""Quick! Go back to the village and find something to defend yourself with. Try to buy something else this time.
              Which direction would you like to move in""")
             player.move(opt2)
 
+class Temple(Place):
+    def describe(self,player):
+        opt = input("""Phew! That was close.
+                    Well done, you're almost there
+                    In this sacred temple, you must-
+                    Hold on! You just revieved a note from a messenger pigeon, it reads:
+
+                    ' y o u r   d e s t i n y   l i e s   w i t h   t h e   c o l d'
+
+                    ...Ominous!
+                    Anyways you must simply retrieve the golden relic, which will help you to reach the next level
+                    It's as easy as that! - or is it >:)     Press 'enter' to retrieve the golden relic""")
+        if not opt:
+            player.pick_up('golden relic')
+            direction = input("""The golden relic has opned two pathways to for you!
+                              The Woods or the Arctic Desert
+                              Think wisely about this decision...s one will lead to your doom! Which direction would you like to move: """)
+            player.move(direction)
 
 
+class Woods(Place):
+    def describe(self,player):
+        opt = input("""A terrible choice! A great Beast roams these lands which no man can defeat.
+                    The only chance of your survival is in taking a magial portal, taking you back to he meadow.
+                    Quick, it approaching! Enter 'p' to take the portal""")
+        if opt == 'p':
+            print("You have entered the magic portal!")
+            for place in self.game.places:
+                if place.name == "The Meadow":
+                    player.current_place = place
+        else:
+            print("""Oh no he beast has gotten to you...
+                      G A M E    O V E R !   """)
+            exit()
 
-
-
-
+class Arctic_Desert(Place):
+    def describe(self,player):
+        opt1 = input("""A wise decision!
+               Now, one last time, press 'enter' to take the rowing boat that will take you to your final destination!""")
+        if not opt1:
+            player.move('south')
     
+class Lost_Island(Place):
+    def describe(self,player):
+        print("""Welcome to The LOst Island of Wonders. Congratulations you hae found the reasure, which was the Island all along!""")
+        exit()
 
+
+        
+        
 
             
 
     
 
-#but your strength has greatly reduced. Hurry on to the next level to get better")
+
             
 
 
@@ -297,11 +343,11 @@ class Game:
         market = Market("The Trading Market", "Here you can sell any goods you have in exchange for gold coins", items = ['lantern'])
         cave = Cave("Dark Cave", "This cave is completely dark, and a blind goblin guards the sword you need", items=["armour"], enemies=["goblin"])
         village = Village("The Mystic Village", "Here, you can buy items from the friendly villagers", items=['mystery item'])
-        castle = Place("The Ancient Castle", "This castle is guarded by a fierce army", items=["crown"], enemies=["army"], locked=True, key="sword")
-        temple = Place("The Temple", "This temple is crucial to your future in the game. Make wise choices!", items=['golden relic'], enemies=["shooting arrows"], locked=True, key=["armour"])
-        woods = Place('The Woods', 'You have chosen the wrong destination. This will lead to you doom! There is giant beast here that no man is strong enough to defeat. The only chance for your survival is to take a portal back to the canopy' )
-        arctic_desert = Place('The Arctic Desert', 'Here you will find an enchanted rowing boat that will take you to your final destination')
-        lost_island = Place('The Lost Island', 'Congratulations! You have found the treasure and made it to the final level')
+        castle = Castle("The Ancient Castle", "This castle is guarded by a fierce army", items=["crown"], enemies=["army"])
+        temple = Temple("The Temple", "This temple is crucial to your future in the game. Make wise choices!", items=['golden relic'], enemies=["shooting arrows"], locked=True, key=["armour"])
+        woods = Woods('The Woods', 'You have chosen the wrong destination. This will lead to you doom! There is giant beast here that no man is strong enough to defeat. The only chance for your survival is to take a portal back to the canopy' )
+        arctic_desert = Arctic_Desert('The Arctic Desert', 'Here you will find an enchanted rowing boat that will take you to your final destination')
+        lost_island = Lost_Island('The Lost Island', 'Congratulations! You have found the treasure and made it to the final level')
 
         
 
@@ -310,10 +356,10 @@ class Game:
         meadow.connect(market, "west")
         cave.connect(market, "south")
         market.connect(cave, "north")
-        village.connect(cave, "east")
-        cave.connect(village, "west")
-        castle.connect(cave, "south")
-        cave.connect(castle, "north")
+        village.connect(cave, "south")
+        cave.connect(village, "north")
+        castle.connect(village, "west")
+        village.connect(castle, "east")
         temple.connect(castle, "west")
         castle.connect(temple, "east")
         temple.connect(woods, 'east')
