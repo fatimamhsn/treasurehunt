@@ -30,111 +30,145 @@ class Place:
 class Meadow(Place):
     
     def describe(self,player):
-        print(f"You are now in {self.name}")
-        print("You stumble upon some magical berries!")
+        print(f"""
+               You are now in {self.name}""")
+        print("""
+              You stumble upon some magical berries!""")
         pickup = input("Press 'enter' to pick up the magical berries")
         if not pickup:
             player.pick_up('magical berries')
-        answer = input("""The talking rabbit has come to tell you something: 'Eat all the food you can get. This will increase your strength and energy'.
+        answer = input("""
+                       
+                       The talking rabbit has come to tell you something: 'Eat all the food you can get. This will increase your strength and energy'.
                         Would you like to eat all or some of the magical berries? Choose wisely! all/some?   """)
         if answer.lower() == 'all':
             player.energy +=50
             player.strength +=40
-            print("Great! Your strength and energy has increased")
+            print("""
+                  Great! Your strength and energy has increased""")
             player.remove_item('magical berries')
 
         elif answer.lower()== 'some':
             player.strength += 20
             player.strength += 30
-            print("Great! Your strength and energy has increased, and you still have some food for later!")
+            print("""
+                  Great! Your strength and energy has increased, and you still have some food for later!""")
 
 
 class Market(Place):
     def describe(self, player):
         if not self.has_visited:
-            print(f"You are now in {self.name}")
+            print(f"\nYou are now in {self.name}")
             if 'magical berries' in player.rucksack:
-                reply = input("""You need Gold.
+                reply = input("""\nYou need Gold.
                                Sell your leftover magical berries in the market!
                                Press 'enter' to do so""")
                 if not reply:
                     player.rucksack.remove('magical berries')
                     player.gold += 10
 
-                opt = input("""You can now buy something, but only one item will be of use.Choose Wisely!
+                opt = input("""\nYou can now buy something, but only one item will be of use.Choose Wisely!
                              Either: 1) New Shoes - 10 gold coins  2) Lantern - 10 gold coins  3)  Bucket - 15 gold coins.
                              (Hint: The next location is very dark!)""")
                 if opt == '1':
                     if (player.gold-10)>0:
                         player.pick_up('new shoes')
-                        print("You have bought new shoes!. They have been added to your rucksack")
+                        print("\nYou have bought new shoes!. They have been added to your rucksack")
                         player.gold -= 10
                         print(f"You have {player.gold} gold coins remaining")
                     else:
-                        print(f"You only have {player.gold} gold coins!")
+                        print(f"\nYou only have {player.gold} gold coins!")
                 elif opt == '2':
                     if (player.gold-10)>0:
                         player.pick_up('lantern')
-                        print("You have bought a lantern!. It has been added to your rucksack")
+                        print("\nYou have bought a lantern!. It has been added to your rucksack")
                         player.gold -= 10
                         print(f"You have {player.gold} gold coins remaining")
                     else:
-                         print(f"You only have {player.gold} gold coins!")
+                         print(f"\nYou only have {player.gold} gold coins!")
                 elif opt == '3':
                     if (player.gold-15)<0:
                         player.pick_up('bucket')
-                        print("You have bought a bucket!. It has been added to your rucksack")
+                        print("\nYou have bought a bucket!. It has been added to your rucksack")
                         player.gold -= 15
                         print(f"You have {player.gold} gold coins remaining")
                     else:
-                        print(f"You only have {player.gold} golden coins")
+                        print(f"\nYou only have {player.gold} golden coins")
             else:
-                direction = input(""" You need Gold to buy your next item. But you should not have listened to the talking rabbit!
+                direction = input("""\n You need Gold to buy your next item. But you should not have listened to the talking rabbit!
                       Now you have nothing to sell. You can return to the meadow to collect more fruits and nuts. Be wiser next time!
-                    Which direction would you like to move in? """)
+                    Which direction would you like to move in? 
+         ·············       ············           ············                
+     |/\ :The Village:       :The Castle:           :The Temple:                
+     /  \·············       ············           ············ LOCKED               
+    /____\ LOCKED               /\  /\  LOCKED          |___|                   
+    │    │░░░░░░░░░░░░░░░░░░░░░ ||__||                  |                /\     
+    │_||_│                      |    |░░░░░░░░░░░░░░░░░||||             //\\    
+      ░░                        | || |                |||||| ░░░░░░░░░░///\\\   
+      ░░                                             ||||||||            ][     
+      ░░                                             | |||| |       ··········· 
+   ·········                                         |_||||_|       :The Woods: 
+   The Cave:                                            ░░          ··········· 
+  ·········· LOCKED                                     ░░           LOCKED           
+     ▄▄▄▄▄                                              /|\                     
+    ▄■■■■■▄                                            /_|_\                    
+   ▄■■■■■■■▄                                         ____|____                  
+      ░░                                             \_o_o_o_/                  
+      ░░                                                ···················     
+      ░░                                                :The Arctic Desert:     
+     \|/        _( )_                                   ···················     
+     /|\       (_(%)_)                                      LOCKED                    
+    / | \        (_)\                                                           
+   /_/ \_\ ░░░░░░    | __      YOU ARE HERE                                                 
+ ············        |/_ ···········                                            
+ :The Market:        |   :The meadow                                            
+ ············        |   ···········                                                                                                                                                                        
+""")
                 player.move(direction)
             self.has_visited=True
         else:
             print('Welcome back')
-            choice = input("""You can now buy something, but only one item will be of use.Choose Wisely!
+            choice = input("""\nYou can now buy something, but only one item will be of use.Choose Wisely!
                              Either: 1) New Shoes - 10 gold coins  2) Lantern - 25 gold coins  3)  Bucket.
                              (Hint: The next location is very dark!)""")
             if choice == '1':
                 if (player.gold-10)>0:
                     player.pick_up('new shoes')
-                    print("You have bought new shoes!. They have been added to your rucksack")
+                    print("\nYou have bought new shoes!. They have been added to your rucksack")
                     player.gold -= 10
                     print(f"You have {player.gold} gold coins remaining")
                 else:
-                    print(f"You only have {player.gold} gold coins!")
+                    print(f"\nYou only have {player.gold} gold coins!")
             elif choice == '2':
                 if (player.gold-10)>0:
                     player.pick_up('lantern')
-                    print("You have bought a lantern!. It has been added to your rucksack")
+                    print("\nYou have bought a lantern!. It has been added to your rucksack")
                     player.gold -= 10
                     print(f"You have {player.gold} gold coins remaining")
                 else:
-                     print(f"You only have {player.gold} gold coins!")
+                     print(f"\nYou only have {player.gold} gold coins!")
             elif choice == '3':
                 if (player.gold-15)<0:
                     player.pick_up('bucket')
-                    print("You have bought a bucket!. It has been added to your rucksack")
+                    print("\nYou have bought a bucket!. It has been added to your rucksack")
                     player.gold -= 15
                     print(f"You have {player.gold} gold coins remaining")
                 else:
-                    print(f"You only have {player.gold} golden coins")
+                    print(f"\nYou only have {player.gold} golden coins")
            
 
 
 class Cave(Place):
     def describe(self,player):
         while'lantern' not in player.rucksack:
-            direction = input("""Oh no! This cave is very dark and we can't see.
-            Which direction would you like to move, in order to go back to the market and buy a lantern """)
+            direction = input(""" 
+                                                                                
+ Oh no! This cave is very dark and we can't see. Go back the way you came (go south)
+            Which direction would you like to move, in order to go back to the market and buy a lantern:""")
             player.move(direction)
 
 
-        opt = input(f"""You are now in {self.name}
+        opt = input(f"""\nYou are now in {self.name}
         Luckily, you picked up a lantern ealier
         Oh no! A goblin guards the next item, enter "x" to defeat the goblin and retrieve the item""")
         if opt == 'x':
@@ -143,38 +177,42 @@ class Cave(Place):
             if not opt2:
                 player.pick_up('armour')
 
+
+
+
 class Village(Place):
     def describe(self,player):
-        print(f"""You are now in {self.name}
+        
+        print(f"""\bYou are now in {self.name}
         Here you can buy enchanted items from villagers""")
-        opt = input("""What would you like to buy: 1) A Mystery item - 20 gold coins  2) A Money Multiplier - 20 gold coins 3) A Magical Wish - 15 gold coins""")
+        opt = input("""\nWhat would you like to buy: 1) A Mystery item - 20 gold coins  2) A Money Multiplier - 20 gold coins 3) A Magical Wish - 15 gold coins""")
         if opt == '1':
             remaining = player.gold - 20
             if remaining<0:
-                print(f"You only have {player.gold} gold coins")
+                print(f"\nYou only have {player.gold} gold coins")
             else:
-                print(f"""You have bought the Mystery Item! It has been added to you backpack.
+                print(f"""\nYou have bought the Mystery Item! It has been added to you backpack.
                 You have {remaining} gold coing remaining""")
                 player.pick_up('mystery item')
         elif opt == '2':
             remaining = player.gold - 20
             if remaining<0:
-                print(f"You only have {player.gold} gold coins")
+                print(f"\nYou only have {player.gold} gold coins")
             else:
                 player.gold = player.gold*2
-                print(f"""You have bought the Money Multiplier! It has been added to you backpack.
-                Congratulations! You went from now have {player.gold} gold coins!""")
+                print(f"""\nYou have bought the Money Multiplier! It has been added to you backpack.
+                Congratulations! You now have {player.gold} gold coins!""")
         elif opt == '3':
             remaining = player.gold-15
             if remaining<0:
-                print(f"You only have {player.gold} gold coins!")      
+                print(f"\nYou only have {player.gold} gold coins!")      
             else:
-                choice = input("You have bought the Magical wish. You can either have 1)100 coins  2)A Lucky Prize")  
+                choice = input("\nYou have bought the Magical wish. You can either have 1)100 coins  2)A Lucky Prize")  
                 if choice == '1':
-                    print(f"""Congratulations! You hve been granted 100 gold coins.
+                    print(f"""\nCongratulations! You hve been granted 100 gold coins.
                     You now have {player.gold} gold coins""")
                 elif choice == '2':
-                    print("""You have been granted Lucky Prize
+                    print("""\nYou have been granted Lucky Prize
                     
                     Congratulations! You have found the Enchanted Treasure and completed the quest!""")
                     exit()
@@ -182,29 +220,59 @@ class Village(Place):
 
 class Castle(Place):
     def describe(self,player):
-        print(f"You are now in {self.name}")
-        opt = input("""Here you need to be as quick as possible to steal something very special...The crown jewels!
+        print(f"\nYou are now in {self.name}")
+        opt = input("""\nHere you need to be as quick as possible to steal something very special...The crown jewels!
             Press 'enter' to pick them up""")
         if not opt:
             player.pick_up('crown')
-        print("Oh no! You've set off an alarm. A huge army is approaching to capture you")
+        print("\nOh no! You've set off an alarm. A huge army is approaching to capture you")
         if 'mystery item' in player.rucksack:
-            opt1 = input(""" Wait! Luckily you chose the Mystery Item. Enter 'help' to save yourself""")
+            opt1 = input("\n Wait! Luckily you chose the Mystery Item. Enter 'help' to save yourself")
             if opt1 == 'help':
                 direction = 'east'
                 player.move(direction)
             else:
-                print("""Oh no! The army has reached you...
+                print("""\nOh no! The army has reached you...
                            G A M E   O V E R !""")
         else:
             player.remove_item('crown')
-            opt2 = input("""Quick! Go back to the village and find something to defend yourself with. Try to buy something else this time.
-             Which direction would you like to move in""")
+            opt2 = input("""
+                         Quick! Go back to the village and find something to defend yourself with. Try to buy something else this time.
+             Which direction would you like to move in:
+          ·············       ············          ············                
+     |/\ :The Village:       :The Castle:           :The Temple:                
+     /  \·············       ············           ············ LOCKED               
+    /____\                      /\  /\                  |___|                   
+    │    │░░░░░░░░░░░░░░░░░░░░░ ||__||                  |                /\     
+    │_||_│                      |    |░░░░░░░░░░░░░░░░░||||             //\\    
+      ░░                        | || |                |||||| ░░░░░░░░░░///\\\   
+      ░░                    YOU ARE HERE             ||||||||            ][     
+      ░░                                             | |||| |       ··········· 
+   ·········                                         |_||||_|       :The Woods: 
+   The Cave:                                            ░░          ··········· 
+  ··········                                            ░░             LOCKED       
+     ▄▄▄▄▄                                              /|\                     
+    ▄■■■■■▄                                            /_|_\                  
+   ▄■■■■■■■▄                                         ____|____                  
+      ░░                                             \_o_o_o_/                  
+      ░░                                                ···················     
+      ░░                                                :The Arctic Desert:     
+     \|/        _( )_                                   ···················     
+     /|\       (_(%)_)                                    LOCKED                      
+    / | \        (_)\                                                           
+   /_/ \_\ ░░░░░░    | __                                                       
+ ············        |/_ ···········                                            
+ :The Market:        |   :The meadow                                            
+ ············        |   ···········                                            
+        
+                                                                                
+""")
             player.move(opt2)
 
 class Temple(Place):
     def describe(self,player):
-        opt = input("""Phew! That was close.
+        opt = input("""
+                    Phew! That was close.
                     Well done, you're almost there
                     In this sacred temple, you must-
                     Hold on! You just revieved a note from a messenger pigeon, it reads:
@@ -216,15 +284,43 @@ class Temple(Place):
                     It's as easy as that! - or is it >:)     Press 'enter' to retrieve the golden relic""")
         if not opt:
             player.pick_up('golden relic')
-            direction = input("""The golden relic has opned two pathways to for you!
+            direction = input("""
+         ·············       ············           ············                
+     |/\ :The Village:       :The Castle:           :The Temple:                
+     /  \·············       ············           ············                
+    /____\                      /\  /\                  |___|                   
+    │    │░░░░░░░░░░░░░░░░░░░░░ ||__||                  |                /\     
+    │_||_│                      |    |░░░░░░░░░░░░░░░░░||||             //\\    
+      ░░                        | || |                |||||| ░░░░░░░░░░///\\\   
+      ░░                                             ||||||||            ][     
+      ░░                                             | |||| |       ··········· 
+   ·········                                         |_||||_|       :The Woods: 
+   The Cave:                                            ░░          ··········· 
+  ··········                                            ░░                      
+     ▄▄▄▄▄                                              /|\                     
+    ▄■■■■■▄                                            /_|_\                    
+   ▄■■■■■■■▄                                         ____|____                  
+      ░░                                             \_o_o_o_/                  
+      ░░                                                ···················     
+      ░░                                                :The Arctic Desert:     
+     \|/        _( )_                                   ···················     
+     /|\       (_(%)_)                                      YOU ARE HERE                    
+    / | \        (_)\                                                           
+   /_/ \_\ ░░░░░░    | __                                                       
+ ············        |/_ ···········                                            
+ :The Market:        |   :The meadow                                            
+ ············        |   ···········                                            
+                                                                                
+                              The golden relic has opned two pathways to for you!
                               The Woods or the Arctic Desert
-                              Think wisely about this decision...s one will lead to your doom! Which direction would you like to move: """)
+                              Think wisely about this decision... as one will lead to your doom! Which direction would you like to move: """)
             player.move(direction)
 
 
 class Woods(Place):
     def describe(self,player):
-        opt = input("""A terrible choice! A great Beast roams these lands which no man can defeat.
+        opt = input("""
+                    A terrible choice! A great Beast roams these lands which no man can defeat.
                     The only chance of your survival is in taking a magial portal, taking you back to he meadow.
                     Quick, it approaching! Enter 'p' to take the portal""")
         if opt == 'p':
@@ -239,14 +335,42 @@ class Woods(Place):
 
 class Arctic_Desert(Place):
     def describe(self,player):
-        opt1 = input("""A wise decision!
-               Now, one last time, press 'enter' to take the rowing boat that will take you to your final destination!""")
+        opt1 = input("""                                                            
+         ·············       ············           ············                
+     |/\ :The Village:       :The Castle:           :The Temple:                
+     /  \·············       ············           ············                
+    /____\                      /\  /\                  |___|                   
+    │    │░░░░░░░░░░░░░░░░░░░░░ ||__||                  |                /\     
+    │_||_│                      |    |░░░░░░░░░░░░░░░░░||||             //\\    
+      ░░                        | || |                |||||| ░░░░░░░░░░///\\\   
+      ░░                                             ||||||||            ][     
+      ░░                                             | |||| |       ··········· 
+   ·········                                         |_||||_|       :The Woods: 
+   The Cave:                                            ░░          ··········· 
+  ··········                      ■■      ■■            ░░                      
+     ▄▄▄▄▄                          ■■  ■■              /|\                     
+    ▄■■■■■▄                           ■■    ░░░░░░░░░░░/_|_\                    
+   ▄■■■■■■■▄                        ■■  ■■           ____|____                  
+      ░░                          ■■      ■■         \_o_o_o_/                  
+      ░░                       ·················        ···················     
+      ░░                       :The Lost Island:        :The Arctic Desert:     
+     \|/        _( )_           ···············         ···················     
+     /|\       (_(%)_)                                       YOU ARE HERE                   
+    / | \        (_)\                                                           
+   /_/ \_\ ░░░░░░    | __                                                       
+ ············        |/_ ···········                                            
+ :The Market:        |   :The meadow                                            
+ ············        |   ···········                      
+
+
+               A wise decision! You have unlocked the Lost Island!
+                Now, press 'enter' to take the rowing boat that will take you to your final destination!""")
         if not opt1:
             player.move('south')
     
 class Lost_Island(Place):
     def describe(self,player):
-        print("""Welcome to The LOst Island of Wonders. Congratulations you hae found the reasure, which was the Island all along!""")
+        print("""Welcome to The Lost Island of Wonders. Congratulations you hae found the reasure, which was the Island all along!""")
         exit()
 
 
@@ -262,15 +386,14 @@ class Lost_Island(Place):
 
 
 class Player:
-    def __init__(self, name, capacity=5):
+    def __init__(self, name):
         self.name = name
-        self.health = 100
         self.strength = 10
         self.energy = 10
         self.gold = 30
         self.rucksack = []
-        self.capacity = capacity
         self.current_place = None
+        self.health = 100
 
     def move(self, direction):
         if direction in self.current_place.connections:
@@ -302,33 +425,40 @@ class Player:
        
 
 
-    def fight(self, enemy):
-        if enemy in self.current_place.enemies:
-            print(f"You fight {enemy}!")
-            if "Sword" in self.rucksack:
-                print(f"You defeat {enemy} using the Sword!")
-                self.current_place.enemies.remove(enemy)
-            else:
-                print(f"You were defeated by {enemy}! Game over!")
-                self.health = 0
-        else:
-            print("That enemy is not here.")
-
     def view_rucksack(self):
         print(f"Rucksack contents: {', '.join(self.rucksack)}")
 
     def check_map(self):
-        print("You check the map. The map shows pathways between places, but it doesn't reveal everything.")
+        print(""""\n                                                                                
+         ·············       ············           ············                
+     |/\ :The Village:       :The Castle:           :The Temple:                
+     /  \·············       ············           ············                
+    /____\                      /\  /\                  |___|                   
+    │    │░░░░░░░░░░░░░░░░░░░░░ ||__||                  |                /\     
+    │_||_│                      |    |░░░░░░░░░░░░░░░░░||||             //\\    
+      ░░                        | || |                |||||| ░░░░░░░░░░///\\\   
+      ░░                                             ||||||||            ][     
+      ░░                                             | |||| |       ··········· 
+   ·········                                         |_||||_|       :The Woods: 
+   The Cave:                                            ░░          ··········· 
+  ··········                                            ░░                      
+     ▄▄▄▄▄                                              /|\                     
+    ▄■■■■■▄                                            /_|_\                    
+   ▄■■■■■■■▄                                         ____|____                  
+      ░░                                             \_o_o_o_/                  
+      ░░                                                ···················     
+      ░░                                                :The Arctic Desert:     
+     \|/        _( )_                                   ···················     
+     /|\       (_(%)_)                                                          
+    / | \        (_)\                                                           
+   /_/ \_\ ░░░░░░    | __                                                       
+ ············        |/_ ···········                                            
+ :The Market:        |   :The meadow                                            
+ ············        |   ···········                                            
 
-    def solve_puzzle(self):
-        print("You attempt to solve the puzzle. Solve this to win!")
-        answer = input("What is the sum of 15 and 27? ")
-        if answer == "42":
-            print("Congratulations! You solved the puzzle and found the Enchanted Treasure!")
-            print("You win!")
-            self.health = 0
-        else:
-            print("Incorrect answer. Try again later.")
+ 
+   """)
+
 
 class Game:
     def __init__(self):
@@ -344,7 +474,7 @@ class Game:
         cave = Cave("Dark Cave", "This cave is completely dark, and a blind goblin guards the sword you need", items=["armour"], enemies=["goblin"])
         village = Village("The Mystic Village", "Here, you can buy items from the friendly villagers", items=['mystery item'])
         castle = Castle("The Ancient Castle", "This castle is guarded by a fierce army", items=["crown"], enemies=["army"])
-        temple = Temple("The Temple", "This temple is crucial to your future in the game. Make wise choices!", items=['golden relic'], enemies=["shooting arrows"], locked=True, key=["armour"])
+        temple = Temple("The Temple", "This temple is crucial to your future in the game. Make wise choices!", items=['golden relic'], enemies=["shooting arrows"])
         woods = Woods('The Woods', 'You have chosen the wrong destination. This will lead to you doom! There is giant beast here that no man is strong enough to defeat. The only chance for your survival is to take a portal back to the canopy' )
         arctic_desert = Arctic_Desert('The Arctic Desert', 'Here you will find an enchanted rowing boat that will take you to your final destination')
         lost_island = Lost_Island('The Lost Island', 'Congratulations! You have found the treasure and made it to the final level')
@@ -382,12 +512,12 @@ class Game:
         
         Explore the Land of Eldoria, collect items, fight enemies, and uncover hidden treasures!
         
-        Type 'help' for a list of commands.""")
+        When asked what to do, you can enter 'help' for a list of commands.""")
 
         self.player.current_place.describe(self.player)
 
         while self.player.health > 0:
-            command = input("\nWhat would you like to do? ").strip().lower()
+            command = input("""\n What would you like to do? (enter 'check map' to see which direction to move in)""").strip().lower()
 
             if command.startswith("move"):
                 direction = command.split(" ")[1]
@@ -429,7 +559,5 @@ class Game:
 
         print("Game over!")
 
-# Start the game
-if __name__ == "__main__":
-    game = Game()  
-    game.start()
+game = Game()  
+game.start()
